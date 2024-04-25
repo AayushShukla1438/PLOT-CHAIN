@@ -1,5 +1,14 @@
 # Blockchain-Based Land Registration System
 
+## Contributors
+
+Author: Masood Ahmed <br>
+Email: masood20@connect.hku.hk <br>
+
+Author: Mohammad Abdur Rahman <br>
+Email: abdur8606@gmail.com <br>
+
+
 ## Project Overview
 
 This project implements a blockchain-based land registration system using Ethereum smart contracts. It features three distinct user interfaces tailored for different stakeholders in the property market:
@@ -107,3 +116,14 @@ With all the configuration done, we're ready to start the application!
 
 2. **Interact with the Application:**
    - You can now interact with the application and the smart contracts. Since we're using a local blockchain, there's no real money involved, making it safe to test out every feature.
+
+
+## Feedback
+
+Pull requests are welcome. For feedback and suggestions, please reach out at the following email: mangimasood2000@gmail.com or abdur8606@gmail.com. 
+
+## License
+
+2024 © The University of Hong Kong
+
+### _Stay Happy and Keep Smiling :)_
