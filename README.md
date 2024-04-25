@@ -1,5 +1,7 @@
 # Blockchain-Based Land Registration System
 
+_Link To The Presentation:_ [Project Presentation](./FITE2010%20Final%20Presentation.pdf) <br>
+
 ## Contributors
 
 Author: Masood Ahmed <br>
