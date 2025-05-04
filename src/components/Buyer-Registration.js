@@ -1,9 +1,8 @@
-// src/components/BuyerRegistration.js
 import React, { useState, useEffect } from "react";
 import LandContract from "../artifacts/Land.json";
 import getWeb3 from "../getWeb3";
 import { useNavigate } from "react-router-dom";
-import BackgroundImage from "../Assets/imgs/1270244.jpg";
+import BackgroundImage from "../Assets/imgs/bg.png";
 import { Box, Typography, Container, Button } from "@mui/material";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -52,7 +51,6 @@ const BuyerRegistration = () => {
     e.preventDefault();
 
     try {
-      console.log(accounts[1]);
       await contract.methods
         .registerBuyer(name, age, city, HKID, email)
         .send({ from: accounts[1], gas: "6721975" });
@@ -69,104 +67,122 @@ const BuyerRegistration = () => {
   return (
     <Container
       maxWidth={false}
+      disableGutters
       style={{
-        backgroundImage: `url(${BackgroundImage})`,
+        backgroundColor: "#D7F5FF",
         width: "100vw",
         height: "100vh",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        textAlign: "center",
-        paddingTop: '15%'
+        position: "relative",
+        overflow: "hidden",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
+      {/* Background image over solid color */}
       <Box
-        height={430}
-        width={200}
-        my={4}
-        gap={4}
-        p={2}
-        sx={{ border: "2px solid grey" }}
-        style={{
-          background: "#fff",
-          width: " 35%",
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundImage: `url(${BackgroundImage})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          zIndex: 0,
+        }}
+      />
+
+      {/* Registration Container */}
+      <Box
+        sx={{
+          zIndex: 1,
+          position: "absolute",
+          top: "24%",            // Move vertically (adjust this to reposition)
+          left: "28%",           // Move horizontally (adjust this to reposition)
+          width: "39%",          // ✅ Resize this to make the glass container bigger/smaller
+          height: "54%",         // ✅ Resize this to adjust height
+          backgroundColor: "rgba(255, 255, 255, 0.2)", // Transparent white
+          borderRadius: "16px",
+          boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          border: "1px solid rgba(255, 255, 255, 0.18)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "2rem",
           textAlign: "center",
-          margin: "auto",
-          boxShadow: "0px 2px 20px rgba(10, 10, 10, 10)", // Add box shadow
-          borderRadius: "20px",
+          
         }}
       >
-        <Typography
-          variant="h5"
-          component="h2"
-          style={{ color: "#000", fontWeight: 'bold', paddingTop: '10px'}}
-        >
+        <Typography variant="h5" fontWeight="bold" pb={1}>
           Buyer Registration
         </Typography>
         <Typography
-          component="h2"
-          style={{ color: "#000", marginBottom: "30px", paddingTop: "20px", fontWeight: 'bolder' }}
+          variant="subtitle1"
+          sx={{ fontStyle: "italic", mb: 3 }}
         >
-          <i>Wallet address being used:</i> {accounts[1]}
+          Wallet address being used: {accounts[1]}
         </Typography>
         <form onSubmit={handleRegister}>
-          <div>
+          <Box mb={2}>
             <label>Name:</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              style={{ marginLeft: "20px", marginBottom: "20px" }}
+              style={{ marginLeft: "20px" }}
             />
-          </div>
-          <div>
+          </Box>
+          <Box mb={2}>
             <label>Age:</label>
             <input
               type="number"
               value={age}
               onChange={(e) => setAge(e.target.value)}
               required
-              style={{ marginLeft: "33px", marginBottom: "20px" }}
+              style={{ marginLeft: "33px" }}
             />
-          </div>
-          <div>
+          </Box>
+          <Box mb={2}>
             <label>City:</label>
             <input
               type="text"
               value={city}
               onChange={(e) => setCity(e.target.value)}
               required
-              style={{ marginLeft: "30px", marginBottom: "20px" }}
+              style={{ marginLeft: "30px" }}
             />
-          </div>
-          <div>
+          </Box>
+          <Box mb={2}>
             <label>HKID:</label>
             <input
               type="text"
               value={HKID}
               onChange={(e) => setHKID(e.target.value)}
               required
-              style={{ marginLeft: "23px", marginBottom: "20px" }}
+              style={{ marginLeft: "23px" }}
             />
-          </div>
-          <div>
+          </Box>
+          <Box mb={3}>
             <label>Email:</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              style={{ marginLeft: "20px", marginBottom: "30px" }}
+              style={{ marginLeft: "20px" }}
             />
-          </div>
+          </Box>
           <Button
             variant="contained"
             color="primary"
-            style={{
-              marginBottom: "20px",
-            }}
             type="submit"
-            onSubmit={handleRegister}
           >
             Register
           </Button>

@@ -1,105 +1,97 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import BackgroundImage from "../Assets/imgs/16623.jpg"; // Import background image for the landing page
-import { Box, Typography, Container, Button } from "@mui/material"; // Import Material-UI components
-import "@fontsource/roboto/300.css"; // Import Roboto font weights for typography
+import BackgroundImage from "../Assets/imgs/bg.png";
+import { Box, Typography, Container, Button } from "@mui/material";
+import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-// The LandingPage component is the first page that users see when they visit the application.
 const LandingPage = () => {
   return (
-    // Container with a background image that covers the entire viewport
     <Container
       maxWidth={false}
+      disableGutters
       style={{
-        backgroundImage: `url(${BackgroundImage})`,
+        backgroundColor: "#D7F5FF", // 💡 Base color of the full screen
         width: "100vw",
         height: "100vh",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        textAlign: "center",
+        position: "relative",
+        overflow: "hidden",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
-      {/* Box used as a wrapper for the title and subtitle to control their width and margin */}
-      <Box style={{ width: "50%", margin: "auto" }}>
-        {/* Main title of the landing page */}
-        <Typography
-          variant="h2"
-          component="h2"
-          style={{ color: "#FEFDED", marginBottom: "5%", paddingTop: "12%" }}
-          sx={{ fontWeight: "bold" }}
-        >
-          Blockchain-based Land Registry
-        </Typography>
-        {/* Subtitle with a brief description of the service */}
-        <Typography
-          variant="h5"
-          component="h5"
-          style={{ marginBottom: "10%", color: "#FEFDED" }}
-          sx={{ fontWeight: "medium", fontStyle: "italic" }}
-        >
-          Securing Your Ground, Block by Block - Immutable Land Registration at
-          Your Fingertips!
-        </Typography>
-      </Box>
-
-      {/* Box that serves as a card for role selection with styling for visibility */}
+      {/* Background image layer */}
       <Box
-        height={200}
-        width={200}
-        my={4}
-        gap={4}
-        p={2}
-        sx={{ border: "2px solid grey" }}
-        style={{
-          background: "#fff",
-          width: "35%",
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundImage: `url(${BackgroundImage})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          zIndex: 0,
+        }}
+      />
+
+      {/* Glassy container on top */}
+      <Box
+        sx={{
+          zIndex: 1,
+          position: "absolute",
+          top: "24%",            // Move vertically (adjust this to reposition)
+          left: "28%",           // Move horizontally (adjust this to reposition)
+          width: "39%",          // ✅ Resize this to make the glass container bigger/smaller
+          height: "54%",         // ✅ Resize this to adjust height
+          backgroundColor: "rgba(255, 255, 255, 0.2)", // Transparent white
+          borderRadius: "16px",
+          boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          border: "1px solid rgba(255, 255, 255, 0.18)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "2rem",
           textAlign: "center",
-          margin: "auto",
-          boxShadow: "0px 2px 20px rgba(10, 10, 10, 0.1)",
-          borderRadius: "20px",
+          
         }}
       >
-        {/* Prompt for the user to select their role */}
+        <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2 }}>
+          PlotChain
+        </Typography>
+
         <Typography
-          variant="h6"
-          component="h2"
-          style={{ color: "#000", marginBottom: "30px", paddingTop: "20px" }}
+          variant="subtitle1"
+          sx={{ fontStyle: "italic", mb: 4, color: "#555" }}
         >
+          Securing Your Ground, Block by Block - Immutable Land Registration at Your Fingertips!
+        </Typography>
+
+        <Typography variant="h6" sx={{ mb: 3 }}>
           Please select your role:
         </Typography>
-        {/* Buttons for role selection that navigate to different parts of the application */}
-        <Box
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            marginTop: "20px",
-          }}
-        >
-          {/* Button for buyers */}
+
+        <Box display="flex" gap={3}>
           <Button
-            component={Link}
             variant="contained"
             color="primary"
+            component={Link}
             to="/buyer"
-            style={{
-              marginBottom: "20px",
-            }}
           >
             Buyer
           </Button>
-          {/* Button for sellers */}
           <Button
-            component={Link}
             variant="contained"
             color="primary"
+            component={Link}
             to="/seller"
-            style={{
-              marginBottom: "20px",
-            }}
           >
             Seller
           </Button>

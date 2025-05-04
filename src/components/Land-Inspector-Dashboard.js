@@ -1,148 +1,132 @@
 import React, { useState, useEffect } from "react";
 import LandContract from "../artifacts/Land.json";
 import getWeb3 from "../getWeb3";
-import { useNavigate } from "react-router-dom";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import {
-  Button,
-  CardActions,
-  Box,
-  Container,
-} from "@mui/material";
-import { Link } from "react-router-dom";
-import backgroundImage from "../Assets/imgs/550947.jpg";
+import { useNavigate, Link } from "react-router-dom";
+import backgroundImage from "../Assets/imgs/bg.png";
+import { Box, Typography, Container, Button } from "@mui/material";
 
-// The LandInspectorDashboard functional component serves as the main view for the land inspector role.
 const LandInspectorDashboard = () => {
-  // State hooks to manage web3, accounts, and contract instance.
   const [web3, setWeb3] = useState(null);
   const [accounts, setAccounts] = useState([]);
   const [contract, setContract] = useState(null);
 
-  // useNavigate hook to programmatically navigate using React Router.
   let navigate = useNavigate();
 
-  // useEffect hook to initialize web3 and contract instances when the component is mounted.
   useEffect(() => {
     const initWeb3 = async () => {
-        try {
-          // Initialize web3 instance and set account and contract states.
-            const web3Instance = await getWeb3(); // Your method to get the web3 instance
-            const accounts = await web3Instance.eth.getAccounts();
-            const networkId = await web3Instance.eth.net.getId();
-            const deployedNetwork = LandContract.networks[networkId];
-            const contractInstance = new web3Instance.eth.Contract(
-              LandContract.abi,
-              deployedNetwork && deployedNetwork.address
-            );
-    
-            setWeb3(web3Instance);
-            setAccounts(accounts);
-            setContract(contractInstance);
-        } catch (error) {
-          // Alert the user if there is an issue loading web3, accounts, or contract.
-          alert(
-            "Failed to load web3, accounts, or contract. Check console for details."
-          );
-          console.error(error);
-        }
-      };
+      try {
+        const web3Instance = await getWeb3();
+        const accounts = await web3Instance.eth.getAccounts();
+        const networkId = await web3Instance.eth.net.getId();
+        const deployedNetwork = LandContract.networks[networkId];
+        const contractInstance = new web3Instance.eth.Contract(
+          LandContract.abi,
+          deployedNetwork && deployedNetwork.address
+        );
 
-      // Call the initWeb3 function to perform initialization.
-      initWeb3();
+        setWeb3(web3Instance);
+        setAccounts(accounts);
+        setContract(contractInstance);
+      } catch (error) {
+        alert("Failed to load web3, accounts, or contract. Check console for details.");
+        console.error(error);
+      }
+    };
+
+    initWeb3();
   }, []);
 
   return (
     <Container
       maxWidth={false}
       style={{
-        background: "#ffebb2",
+        backgroundColor: "#D7F5FF",
         width: "100vw",
         height: "100vh",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        textAlign: "center",
-        backgroundImage: `url(${backgroundImage})`,
+        position: "relative",
+        overflow: "hidden",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
-      <Box style={{ width: "50%", margin: "auto" }}>
-        {/* Typography components display textual content on the page. */}
-        <Typography
-          variant="h3"
-          component="h2"
-          style={{ color: "#fff", paddingTop: "15%", paddingBottom: "5%", fontWeight: 'bold' }}
-        >
-          Land Inspector Dashboard
-        </Typography>
-        <Typography variant="h6" component="h2" style={{ color: "#fff" }}>
-          Welcome, {accounts[0]} {/* Displaying the first account address */}
-        </Typography>
-      </Box>
       <Box
-        style={{
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          zIndex: 0,
+        }}
+      />
+
+      <Box
+        sx={{
+          zIndex: 1,
+          position: "absolute",
+          top: "26%",
+          left: "28%",
+          width: "39%",
+          height: "52%",
+          backgroundColor: "rgba(255, 255, 255, 0.2)",
+          borderRadius: "16px",
+          boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          border: "1px solid rgba(255, 255, 255, 0.18)",
           display: "flex",
-          flexDirection: "row",
-          paddingTop: "7%",
-          paddingLeft: "2%",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "2rem",
+          textAlign: "center",
         }}
       >
-        <Card style={{ margin: "20px", width: "600px", height: "350px" }}>
-          <Box
-            style={{
-              height: "140px",
-              backgroundColor: "blue",
+        <Typography variant="h5" fontWeight="bold" pb={1}>
+          Land Inspector Dashboard
+        </Typography>
+        <Typography variant="subtitle1" sx={{ fontStyle: "italic", mb: 3 }}>
+          Wallet address: {accounts[0]}
+        </Typography>
+
+        <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
+          <Button
+            component={Link}
+            to="/land-inspector-pending-lands"
+            variant="contained"
+            color="primary"
+            sx={{
+              marginBottom: 2,
+              padding: "10px 20px",
+              backgroundColor: "#0073e6",
+              borderRadius: "8px",
+              "&:hover": { backgroundColor: "#005bb5" },
             }}
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Pending Lands
-            </Typography>
-          </CardContent>
-          <CardActions>
-            {/* Buttons are used here to navigate to different views related to lands and sales. */}
-            <Button
-              component={Link}
-              variant="contained"
-              color="primary"
-              to="/land-inspector-pending-lands"
-              style={{
-                marginBottom: "20px",
-                margin: "auto",
-              }}
-            >
-              View Pending Lands
-            </Button>
-          </CardActions>
-        </Card>
-        <Card style={{ margin: "20px", width: "600px", height: "350px" }}>
-          <Box
-            style={{
-              height: "140px",
-              backgroundColor: "yellow",
+          >
+            View Pending Lands
+          </Button>
+
+          <Button
+            component={Link}
+            to="/land-inspector-pending-sales"
+            variant="contained"
+            color="primary"
+            sx={{
+              marginBottom: 2,
+              padding: "10px 20px",
+              backgroundColor: "#0073e6",
+              borderRadius: "8px",
+              "&:hover": { backgroundColor: "#005bb5" },
             }}
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Pending Sales
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button
-              component={Link}
-              variant="contained"
-              color="primary"
-              to="/land-inspector-pending-sales"
-              style={{
-                marginBottom: "20px",
-                margin: "auto",
-              }}
-            >
-              View Pending Sales
-            </Button>
-          </CardActions>
-        </Card>
+          >
+            View Pending Sales
+          </Button>
+        </Box>
       </Box>
     </Container>
   );

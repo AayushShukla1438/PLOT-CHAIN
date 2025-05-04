@@ -27,13 +27,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  // hide last border
   "&:last-child td, &:last-child th": {
     border: 0,
   },
 }));
 
-//Functional component to render and handle pending sales
 const PendingSales = () => {
   const [web3, setWeb3] = useState(null);
   const [accounts, setAccounts] = useState([]);
@@ -56,8 +54,6 @@ const PendingSales = () => {
         setWeb3(web3Instance);
         setAccounts(accounts);
         setContract(contractInstance);
-        console.log(accounts);
-        console.log(contractInstance);
 
         const salesCount = await contractInstance.methods
           .getRequestsCount()
@@ -75,8 +71,12 @@ const PendingSales = () => {
             let requested = await contractInstance.methods
               .isRequested(i)
               .call();
-            let approved = await contractInstance.methods.isApproved(i).call();
-            let owner = await contractInstance.methods.getLandOwner(i).call();
+            let approved = await contractInstance.methods
+              .isApproved(i)
+              .call();
+            let owner = await contractInstance.methods
+              .getLandOwner(i)
+              .call();
             let sellerDetails = await contractInstance.methods
               .getSellerDetails(owner)
               .call();
@@ -100,12 +100,9 @@ const PendingSales = () => {
             });
           }
         }
-
         setPendingSales(_pendingSales);
       } catch (error) {
-        alert(
-          "Failed to load web3, accounts, or contract. Check console for details."
-        );
+        alert("Failed to load web3, accounts, or contract.");
         console.error(error);
       }
     };
@@ -113,10 +110,7 @@ const PendingSales = () => {
     initWeb3();
   }, []);
 
-  // Function to approve a sale by its request ID
   const approveSale = async (requestId) => {
-  // Send a transaction to the blockchain to approve the sale with the given request ID
-  // The transaction is initiated from the first account in the 'accounts' array
     await contract.methods.approveSale(requestId).send({ from: accounts[0] });
     const salesCount = await contract.methods.getRequestsCount().call();
     let _pendingSales = [];
@@ -162,61 +156,80 @@ const PendingSales = () => {
     <Container
       maxWidth={false}
       style={{
-        background: "#E3FEF7",
-        width: "100vw",
-        height: "100vh",
-        backgroundRepeat: "no-repeat",
+        backgroundImage: `url('/bg1.png')`, // Make sure the image is in your public folder
         backgroundSize: "cover",
-        textAlign: "center",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        width: "100vw",
+        minHeight: "100vh",
+        paddingTop: "5%",
+        paddingBottom: "5%",
       }}
     >
-      <Box style={{ width: "50%", margin: "auto" }}>
+      <Box
+        sx={{
+          maxWidth: "90%",
+          margin: "auto",
+          padding: "3rem",
+          background: "rgba(255, 255, 255, 0.15)",
+          borderRadius: "20px",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+        }}
+      >
         <Typography
           variant="h3"
           component="h2"
-          style={{ color: "#000", marginBottom: "3%", paddingTop: "10%" }}
+          style={{ color: "#000", marginBottom: "2%" }}
+          align="center"
         >
           Pending Sales
         </Typography>
+
+        <TableContainer component={Paper} sx={{ borderRadius: "15px" }}>
+          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>ID</StyledTableCell>
+                <StyledTableCell>Address</StyledTableCell>
+                <StyledTableCell>Price</StyledTableCell>
+                <StyledTableCell>Property ID</StyledTableCell>
+                <StyledTableCell>Seller Name</StyledTableCell>
+                <StyledTableCell>Seller HKID</StyledTableCell>
+                <StyledTableCell>Buyer Name</StyledTableCell>
+                <StyledTableCell>Buyer HKID</StyledTableCell>
+                <StyledTableCell>Action</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {pendingSales.map((land, index) => (
+                <StyledTableRow key={index}>
+                  <StyledTableCell>{land.id}</StyledTableCell>
+                  <StyledTableCell>
+                    <Typography noWrap>{land.landAddress}</Typography>
+                  </StyledTableCell>
+                  <StyledTableCell>{land.landPrice}</StyledTableCell>
+                  <StyledTableCell>{land.propertyPID}</StyledTableCell>
+                  <StyledTableCell>{land.sellerName}</StyledTableCell>
+                  <StyledTableCell>{land.sellerHKID}</StyledTableCell>
+                  <StyledTableCell>Abhay Gupta</StyledTableCell>
+                  <StyledTableCell>F12345678</StyledTableCell>
+                  <StyledTableCell>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => approveSale(land.id)}
+                    >
+                      Approve
+                    </Button>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Box>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>ID</StyledTableCell>
-              <StyledTableCell align="">Address</StyledTableCell>
-              <StyledTableCell align="">Price</StyledTableCell>
-              <StyledTableCell align="">Property ID</StyledTableCell>
-              <StyledTableCell align="">Seller Name</StyledTableCell>
-              <StyledTableCell align="">Seller HKID</StyledTableCell>
-              <StyledTableCell align="">Buyer Name</StyledTableCell>
-              <StyledTableCell align="">Buyer HKID</StyledTableCell>
-              <StyledTableCell align="">Action</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {pendingSales.map((land, index) => (
-              <StyledTableRow key={index}>
-                <StyledTableCell>{land.id}</StyledTableCell>
-                <StyledTableCell align="">
-                  <Typography noWrap>{land.landAddress}</Typography>
-                </StyledTableCell>
-                <StyledTableCell align="">{land.landPrice}</StyledTableCell>
-                <StyledTableCell align="">{land.propertyPID}</StyledTableCell>
-                <StyledTableCell align="">{land.sellerName}</StyledTableCell>
-                <StyledTableCell align="">{land.sellerHKID}</StyledTableCell>
-                <StyledTableCell align="">Mohammad Abdur Rahman</StyledTableCell>
-                <StyledTableCell align="">F12345678</StyledTableCell>
-                <StyledTableCell align="">
-                  <Button onClick={() => approveSale(land.id)}>
-                    Approve Land
-                  </Button>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
     </Container>
   );
 };
