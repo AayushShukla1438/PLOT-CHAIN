@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pathway-style Fraud Detection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h2 {
+      color: #333;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px 0;
+      width: 250px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #888;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    .high { background-color: #fdd; }
+    .medium { background-color: #ffd; }
+    .low { background-color: #dfd; }
+  </style>
+</head>
+<body>
+
+<h2>🧠 Land Transaction Fraud Check (Pathway-style)</h2>
+
+<input type="text" id="txIdInput" placeholder="Enter Transaction ID (e.g., TX0005)" />
+<br>
+<button onclick="checkTransaction()">Analyze Transaction</button>
+
+<div id="result"></div>
+
+<script>
+  function generateFakeTransaction(id) {
+    const random = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+    const choice = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+    const tx = {
+      transaction_id: id,
+      seller_id: `S${id.slice(2)}`,
+      buyer_id: `B${id.slice(2)}`,
+      land_price: random(10000, 50000),
+      estimated_price: random(40000, 100000),
+      owner_changes: random(0, 5),
+      lands_uploaded: random(0, 10),
+      verified: choice([true, false]),
+      blacklisted: choice([true, false]),
+      region: choice(["Safe Area", "Disputed Zone", "Restricted Area"]),
+      timestamp: new Date().toISOString()
+    };
+
+    // Fraud score logic
+    let score = 0;
+    if (tx.blacklisted) score += 50;
+    if (tx.land_price < 0.6 * tx.estimated_price) score += 20;
+    if (tx.owner_changes > 2) score += 15;
+    if (tx.lands_uploaded > 5) score += 10;
+    if (!tx.verified) score += 15;
+    if (["Disputed Zone", "Restricted Area"].includes(tx.region)) score += 10;
+    score = Math.min(score, 100);
+
+    let risk = "LOW";
+    if (score > 70) risk = "HIGH";
+    else if (score > 40) risk = "MEDIUM";
+
+    tx.fraud_score = score;
+    tx.risk_level = risk;
+
+    return tx;
+  }
+
+  function checkTransaction() {
+    const id = document.getElementById("txIdInput").value.trim().toUpperCase();
+    if (!id || !id.startsWith("TX")) {
+      alert("Please enter a valid Transaction ID (e.g., TX0005).");
+      return;
+    }
+
+    const tx = generateFakeTransaction(id);
+    const colorClass = tx.risk_level.toLowerCase();
+
+    const table = `
+      <table class="${colorClass}">
+        <tr><th>Transaction ID</th><td>${tx.transaction_id}</td></tr>
+        <tr><th>Seller ID</th><td>${tx.seller_id}</td></tr>
+        <tr><th>Buyer ID</th><td>${tx.buyer_id}</td></tr>
+        <tr><th>Land Price</th><td>${tx.land_price}</td></tr>
+        <tr><th>Estimated Price</th><td>${tx.estimated_price}</td></tr>
+        <tr><th>Owner Changes</th><td>${tx.owner_changes}</td></tr>
+        <tr><th>Lands Uploaded</th><td>${tx.lands_uploaded}</td></tr>
+        <tr><th>Docs Verified</th><td>${tx.verified}</td></tr>
+        <tr><th>Blacklisted</th><td>${tx.blacklisted}</td></tr>
+        <tr><th>Region</th><td>${tx.region}</td></tr>
+        <tr><th>Timestamp</th><td>${tx.timestamp}</td></tr>
+        <tr><th>Fraud Score</th><td>${tx.fraud_score}</td></tr>
+        <tr><th>Risk Level</th><td><strong>${tx.risk_level}</strong></td></tr>
+      </table>
+    `;
+
+    document.getElementById("result").innerHTML = table;
+  }
+</script>
+
+</body>
+</html>
