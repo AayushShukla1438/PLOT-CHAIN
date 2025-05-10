@@ -208,7 +208,7 @@ const LandingPage = () => {
           <Button
             variant="outlined"
             color="secondary"
-            onClick={() => window.open("/pathway.html", "_blank")}
+            onClick={() => window.open("/p.html", "_blank")}
           >
             Fraud Detection (Pathway)
           </Button>
